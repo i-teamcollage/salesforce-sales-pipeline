@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Author_Set_Once</fullName>
+    <active>true</active>
+    <description>FL3. The lead author is set by automation when the deal is created and can never be changed afterwards.</description>
+    <errorConditionFormula>AND(NOT(ISNEW()), ISCHANGED(Lead_Author__c), NOT(ISBLANK(PRIORVALUE(Lead_Author__c))))</errorConditionFormula>
+    <errorDisplayField>Lead_Author__c</errorDisplayField>
+    <errorMessage>The lead author is set once, when the deal is created, and cannot be changed.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_Response_At__c</fullName>
+    <description>Brief field 3. Required from stage 1. Stamped once by the Task trigger when the A2 Reply task is completed.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Stamped automatically when the Reply task is completed (A2). Read-only.</inlineHelpText>
+    <label>First response time</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

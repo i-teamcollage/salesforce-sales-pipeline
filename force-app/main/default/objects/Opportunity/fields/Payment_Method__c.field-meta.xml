@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Payment_Method__c</fullName>
+    <description>Brief field 17. Required from stage 8. Sets the target full-payment date (A8, Payment_Term__mdt).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>How the client pays. Sets the target date for the full payment (A8).</inlineHelpText>
+    <label>Payment method</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Single payment</fullName>
+                <default>false</default>
+                <label>Single payment</label>
+            </value>
+            <value>
+                <fullName>Bank instalments</fullName>
+                <default>false</default>
+                <label>Bank instalments</label>
+            </value>
+            <value>
+                <fullName>In-house instalments</fullName>
+                <default>false</default>
+                <label>In-house instalments</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

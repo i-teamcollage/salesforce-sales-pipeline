@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Price</fullName>
+        <default>false</default>
+        <label>Price</label>
+    </customValue>
+    <customValue>
+        <fullName>Timing</fullName>
+        <default>false</default>
+        <label>Timing</label>
+    </customValue>
+    <customValue>
+        <fullName>Chose another provider</fullName>
+        <default>false</default>
+        <label>Chose another provider</label>
+    </customValue>
+    <customValue>
+        <fullName>Program does not fit</fullName>
+        <default>false</default>
+        <label>Program does not fit</label>
+    </customValue>
+    <customValue>
+        <fullName>Personal circumstances</fullName>
+        <default>false</default>
+        <label>Personal circumstances</label>
+    </customValue>
+    <customValue>
+        <fullName>No reply</fullName>
+        <default>false</default>
+        <label>No reply</label>
+    </customValue>
+    <description>Why a deal was refused. Filling one moves the deal to Reactivation (A7). No reply is set by the silence rule. The client provides the final list.</description>
+    <masterLabel>Refusal reasons</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

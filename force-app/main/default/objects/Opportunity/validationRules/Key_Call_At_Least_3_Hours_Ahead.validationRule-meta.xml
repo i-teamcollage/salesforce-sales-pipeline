@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Key_Call_At_Least_3_Hours_Ahead</fullName>
+    <active>true</active>
+    <description>A4. A key call slot must be at least 3 hours ahead when it is booked or moved.</description>
+    <errorConditionFormula>AND(OR(ISNEW(), ISCHANGED(Key_Call_At__c)), NOT(ISBLANK(Key_Call_At__c)), Key_Call_At__c &lt; NOW() + 3/24)</errorConditionFormula>
+    <errorDisplayField>Key_Call_At__c</errorDisplayField>
+    <errorMessage>Book the key call at least 3 hours ahead.</errorMessage>
+</ValidationRule>

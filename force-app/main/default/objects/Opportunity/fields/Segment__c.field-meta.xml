@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Segment__c</fullName>
+    <description>Brief field 7. Required from stage 2. Filled by the chat manager.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>One of the four client segments. Needed to move past Qualification in chat.</inlineHelpText>
+    <label>Segment</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Client_Segments</valueSetName>
+    </valueSet>
+</CustomField>

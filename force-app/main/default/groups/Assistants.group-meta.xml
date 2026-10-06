@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Group xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>AC5. Assistants. A criteria-based sharing rule gives this group New clients deals at stages 9 and 10 only.</description>
+    <doesIncludeBosses>false</doesIncludeBosses>
+    <name>Assistants</name>
+</Group>

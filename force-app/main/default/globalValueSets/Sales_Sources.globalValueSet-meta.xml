@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Website</fullName>
+        <default>false</default>
+        <label>Website</label>
+    </customValue>
+    <customValue>
+        <fullName>Search ads</fullName>
+        <default>false</default>
+        <label>Search ads</label>
+    </customValue>
+    <customValue>
+        <fullName>Paid social</fullName>
+        <default>false</default>
+        <label>Paid social</label>
+    </customValue>
+    <customValue>
+        <fullName>Email newsletter</fullName>
+        <default>false</default>
+        <label>Email newsletter</label>
+    </customValue>
+    <customValue>
+        <fullName>Referral</fullName>
+        <default>false</default>
+        <label>Referral</label>
+    </customValue>
+    <customValue>
+        <fullName>Partner</fullName>
+        <default>false</default>
+        <label>Partner</label>
+    </customValue>
+    <customValue>
+        <fullName>Repeat client base</fullName>
+        <default>false</default>
+        <label>Repeat client base</label>
+    </customValue>
+    <customValue>
+        <fullName>Other</fullName>
+        <default>false</default>
+        <label>Other</label>
+    </customValue>
+    <description>Where a lead came from. A1 maps the form's utm_source to one of these values (Source_Mapping__mdt). Replace with the client's own list.</description>
+    <masterLabel>Sales sources</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

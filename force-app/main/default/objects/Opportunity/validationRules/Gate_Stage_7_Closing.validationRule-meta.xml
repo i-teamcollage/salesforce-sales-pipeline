@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gate_Stage_7_Closing</fullName>
+    <active>true</active>
+    <description>FL4. Fields required from stage 7: Objection, Decision control date.</description>
+    <errorConditionFormula>AND(Stage_Order__c &gt; 7, OR(ISBLANK(TEXT(Objection__c)), ISBLANK(Decision_Control_Date__c)))</errorConditionFormula>
+    <errorMessage>To move past Closing, record the objection and the decision control date.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gate_Stage_4_Key_Call_Scheduled</fullName>
+    <active>true</active>
+    <description>FL4. Fields required from stage 4: Key call booked on, Key call date and time, Closer.</description>
+    <errorConditionFormula>AND(Stage_Order__c &gt; 4, OR(ISBLANK(Key_Call_At__c), ISBLANK(Closer__c), ISBLANK(Key_Call_Booked_On__c)))</errorConditionFormula>
+    <errorMessage>To move past Key call scheduled, book the key call: fill in its date and time and the closer. The booking date is stamped automatically.</errorMessage>
+</ValidationRule>

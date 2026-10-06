@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Order__c</fullName>
+    <description>Position of the stage in the New clients flow, used by the stage-gating validation rules (FL4). Repeat sales stages 1-2 sit before qualification (1), stage 3 is the qualification step (2), stage 4 is the shared Key call scheduled (4). Reactivation, Conditional refusal and Closed Lost are 0: a deal can refuse at any stage, so they are not gated. Closed Won is 11, past every stage. Deals outside New clients and Repeat sales are always 0, so other opportunities in the org are never gated.</description>
+    <externalId>false</externalId>
+    <formula>IF(OR(RecordType.DeveloperName = &quot;New_Clients&quot;, RecordType.DeveloperName = &quot;Repeat_Sales&quot;),
+CASE(TEXT(StageName),
+  &quot;New lead&quot;, 1,
+  &quot;Qualification in chat&quot;, 2,
+  &quot;Warm-up&quot;, 3,
+  &quot;Key call scheduled&quot;, 4,
+  &quot;Key call confirmed&quot;, 5,
+  &quot;Key call held&quot;, 6,
+  &quot;Closing&quot;, 7,
+  &quot;Prepayment received&quot;, 8,
+  &quot;Payment received&quot;, 9,
+  &quot;Handed over to preparation&quot;, 10,
+  &quot;Closed Won&quot;, 11,
+  &quot;Building the base&quot;, 1,
+  &quot;Announcement and pre-registration&quot;, 1,
+  &quot;Clarifying the situation&quot;, 2,
+  0),
+0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Where the stage sits in the New clients flow. Fields required from stage N must be filled once this is above N.</inlineHelpText>
+    <label>Stage order</label>
+    <precision>18</precision>
+    <scale>0</scale>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

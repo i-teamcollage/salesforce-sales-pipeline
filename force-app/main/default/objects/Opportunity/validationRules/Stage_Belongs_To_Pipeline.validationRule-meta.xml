@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stage_Belongs_To_Pipeline</fullName>
+    <active>true</active>
+    <description>PL1 to PL3. Salesforce checks a sales process only in the page layout; this rule makes every save, including the API, respect the stage list of the deal's pipeline.</description>
+    <errorConditionFormula>CASE(RecordType.DeveloperName,
+  &quot;New_Clients&quot;, CASE(TEXT(StageName), &quot;New lead&quot;, 1, &quot;Qualification in chat&quot;, 1, &quot;Warm-up&quot;, 1, &quot;Key call scheduled&quot;, 1, &quot;Key call confirmed&quot;, 1, &quot;Key call held&quot;, 1, &quot;Closing&quot;, 1, &quot;Prepayment received&quot;, 1, &quot;Payment received&quot;, 1, &quot;Handed over to preparation&quot;, 1, &quot;Conditional refusal&quot;, 1, &quot;Closed Won&quot;, 1, &quot;Closed Lost&quot;, 1, 0),
+  &quot;Reactivation&quot;, CASE(TEXT(StageName), &quot;Deferred demand&quot;, 1, &quot;Waiting for next period&quot;, 1, &quot;Ignored&quot;, 1, &quot;Regular touches&quot;, 1, &quot;Dialogue resumed&quot;, 1, &quot;Closed Lost&quot;, 1, 0),
+  &quot;Repeat_Sales&quot;, CASE(TEXT(StageName), &quot;Building the base&quot;, 1, &quot;Announcement and pre-registration&quot;, 1, &quot;Clarifying the situation&quot;, 1, &quot;Key call scheduled&quot;, 1, &quot;Closed Lost&quot;, 1, 0),
+  1) = 0</errorConditionFormula>
+    <errorDisplayField>StageName</errorDisplayField>
+    <errorMessage>This stage is not in the deal's pipeline. Pick one of the pipeline's stages, or move the deal to the other pipeline first.</errorMessage>
+</ValidationRule>

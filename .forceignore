@@ -1,0 +1,4 @@
+# Files the Salesforce CLI never deploys
+**/jsconfig.json
+**/.eslintrc.json
+**/__tests__/**

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Key_Call_Result__c</fullName>
+    <description>Brief field 13. Required from stage 6. Filled by the closer.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>What the client decided on the call.</inlineHelpText>
+    <label>Key call result</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Purchase</fullName>
+                <default>false</default>
+                <label>Purchase</label>
+            </value>
+            <value>
+                <fullName>Thinking</fullName>
+                <default>false</default>
+                <label>Thinking</label>
+            </value>
+            <value>
+                <fullName>Refusal</fullName>
+                <default>false</default>
+                <label>Refusal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

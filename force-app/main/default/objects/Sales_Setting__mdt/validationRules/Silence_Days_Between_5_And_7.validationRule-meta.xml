@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Silence_Days_Between_5_And_7</fullName>
+    <active>true</active>
+    <description>The brief allows 5 to 7 days of silence before a deal moves to Reactivation (A7).</description>
+    <errorConditionFormula>OR(Silence_Days__c &lt; 5, Silence_Days__c &gt; 7)</errorConditionFormula>
+    <errorDisplayField>Silence_Days__c</errorDisplayField>
+    <errorMessage>The brief allows 5 to 7 days of silence.</errorMessage>
+</ValidationRule>

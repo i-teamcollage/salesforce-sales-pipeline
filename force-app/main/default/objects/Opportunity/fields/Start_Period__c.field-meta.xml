@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Start_Period__c</fullName>
+    <description>Brief field 19. Required from stage 8. The brief gives no rule: we assume monthly cohorts, and the client joins the cohort of the month after the prepayment (YYYY-MM). A formula, so it never drifts and needs no list of months (brief review 7).</description>
+    <externalId>false</externalId>
+    <formula>IF(ISBLANK(Prepayment_Date__c), &quot;&quot;,
+  TEXT(YEAR(ADDMONTHS(Prepayment_Date__c, 1))) &amp; &quot;-&quot; &amp;
+  LPAD(TEXT(MONTH(ADDMONTHS(Prepayment_Date__c, 1))), 2, &quot;0&quot;))</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+    <inlineHelpText>The cohort the client starts in: the month after the prepayment. Filled automatically.</inlineHelpText>
+    <label>Start period</label>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

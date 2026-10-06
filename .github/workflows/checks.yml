@@ -1,0 +1,21 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+      - run: pip install pytest==9.1.1 ruff==0.16.10
+      # No Salesforce org in CI: static checks on the metadata, the Node tests of the export, the
+      # traceability rule (every requirement has a test), then the report rebuilt from the stored org run.
+      - run: make check PYTHON=python

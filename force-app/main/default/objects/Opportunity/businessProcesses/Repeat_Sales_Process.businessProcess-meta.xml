@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Repeat_Sales_Process</fullName>
+    <description>Stages of pipeline 3, Repeat sales. After stage 4 the deal continues in New clients.</description>
+    <isActive>true</isActive>
+    <values>
+        <fullName>Building the base</fullName>
+    </values>
+    <values>
+        <fullName>Announcement and pre-registration</fullName>
+    </values>
+    <values>
+        <fullName>Clarifying the situation</fullName>
+    </values>
+    <values>
+        <fullName>Key call scheduled</fullName>
+    </values>
+    <values>
+        <fullName>Closed Lost</fullName>
+    </values>
+</BusinessProcess>

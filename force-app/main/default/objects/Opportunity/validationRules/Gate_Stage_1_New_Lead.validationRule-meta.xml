@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gate_Stage_1_New_Lead</fullName>
+    <active>true</active>
+    <description>FL4. Fields required from stage 1: Source, Request type, First response time, Lead author.</description>
+    <errorConditionFormula>AND(Stage_Order__c &gt; 1, OR(ISBLANK(TEXT(Source__c)), ISBLANK(TEXT(Request_Type__c)), ISBLANK(First_Response_At__c), ISBLANK(Lead_Author__c)))</errorConditionFormula>
+    <errorMessage>To move past New lead, the deal needs a source, a request type, a lead author and a first response time. The first response time is stamped when the Reply task is completed.</errorMessage>
+</ValidationRule>

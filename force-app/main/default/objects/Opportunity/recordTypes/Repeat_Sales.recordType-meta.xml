@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Repeat_Sales</fullName>
+    <active>true</active>
+    <businessProcess>Repeat_Sales_Process</businessProcess>
+    <description>Pipeline 3: past clients in a target segment, up to the booked key call.</description>
+    <label>Repeat sales</label>
+    <picklistValues>
+        <picklist>Grade__c</picklist>
+        <values>
+            <fullName>A</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>C</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Key_Call_Outcome__c</picklist>
+        <values>
+            <fullName>Held</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No-show</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rescheduled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Key_Call_Result__c</picklist>
+        <values>
+            <fullName>Purchase</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thinking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Refusal</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Objection__c</picklist>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Timing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Doubts about results</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs to consult someone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Format does not fit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Comparing schools</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Payment_Method__c</picklist>
+        <values>
+            <fullName>Single payment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bank instalments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In-house instalments</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Qualification_Budget__c</picklist>
+        <values>
+            <fullName>Ready to pay</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Needs instalments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No budget yet</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Qualification_Goal__c</picklist>
+        <values>
+            <fullName>Career change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Promotion</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New skill</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not clear yet</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Qualification_Timing__c</picklist>
+        <values>
+            <fullName>This cohort</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Next cohort</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Later</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Refusal_Reason__c</picklist>
+        <values>
+            <fullName>Price</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Timing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chose another provider</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Program does not fit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personal circumstances</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No reply</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Refusal_Type__c</picklist>
+        <values>
+            <fullName>True refusal</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waiting for next period</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ignored</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Request_Type__c</picklist>
+        <values>
+            <fullName>Application</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Consultation</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Segment__c</picklist>
+        <values>
+            <fullName>Career switcher</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Specialist upskilling</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Graduate</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Source__c</picklist>
+        <values>
+            <fullName>Website</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Search ads</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Paid social</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Email newsletter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Repeat client base</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

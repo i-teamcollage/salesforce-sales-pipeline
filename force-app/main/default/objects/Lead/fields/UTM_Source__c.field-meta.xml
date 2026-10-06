@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UTM_Source__c</fullName>
+    <description>The raw utm_source the website form sends. A1 maps it to a Source value with Source_Mapping__mdt, so an unexpected tag never loses a lead.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Raw utm_source from the website form. Mapped to Source when the deal is created.</inlineHelpText>
+    <label>UTM source</label>
+    <length>80</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

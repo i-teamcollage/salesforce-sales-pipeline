@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.sf/
+.sfdx/
+.localdevserver/
+node_modules/
+reports/raw/
+.DS_Store

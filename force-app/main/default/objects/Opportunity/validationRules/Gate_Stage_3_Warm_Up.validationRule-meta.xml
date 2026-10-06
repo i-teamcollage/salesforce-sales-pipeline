@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gate_Stage_3_Warm_Up</fullName>
+    <active>true</active>
+    <description>FL4. Field required from stage 3: Warm-up touches.</description>
+    <errorConditionFormula>AND(Stage_Order__c &gt; 3, ISBLANK(Warm_Up_Touches__c))</errorConditionFormula>
+    <errorDisplayField>Warm_Up_Touches__c</errorDisplayField>
+    <errorMessage>To move past Warm-up, the deal needs its warm-up touch count. It counts up automatically and starts at 0.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Due_At__c</fullName>
+    <description>Exact deadline of an automated task (the standard due date has no time): A2 reply in 30 minutes, A5 confirmations 24 hours and 1 hour before the call, A6 and A8 control tasks.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The exact time this task is due.</inlineHelpText>
+    <label>Due at</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

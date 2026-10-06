@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingCriteriaRules>
+        <fullName>Assistants_Stages_9_And_10</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>AC5. Assistants see and edit New clients deals at Payment received or Handed over to preparation, and nothing else.</description>
+        <label>Assistants: stages 9 and 10</label>
+        <sharedTo>
+            <group>Assistants</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>New clients</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>StageName</field>
+            <operation>equals</operation>
+            <value>Payment received,Handed over to preparation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+    <sharingCriteriaRules>
+        <fullName>Chat_Managers_Pipelines_1_And_2</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>AC4. Chat managers see and edit every deal in New clients and Reactivation, whoever owns it.</description>
+        <label>Chat managers: pipelines 1 and 2</label>
+        <sharedTo>
+            <group>Chat_Managers</group>
+        </sharedTo>
+        <criteriaItems>
+            <field>RecordTypeId</field>
+            <operation>equals</operation>
+            <value>New clients,Reactivation</value>
+        </criteriaItems>
+        <includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>
+    </sharingCriteriaRules>
+</SharingRules>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <assignments>
+        <name>To_Deferred_Demand</name>
+        <label>To Deferred demand</label>
+        <locationX>578</locationX>
+        <locationY>539</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Reactivation_Record_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Deferred demand</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>To_Ignored</name>
+        <label>To Ignored</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Reactivation_Record_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Ignored</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>To_Waiting_For_Next_Period</name>
+        <label>To Waiting for next period</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Reactivation_Record_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Waiting for next period</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Which_Refusal_Type</name>
+        <label>Which refusal type</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>To_Deferred_Demand</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>True refusal</defaultConnectorLabel>
+        <rules>
+            <name>Waiting_For_Next_Period</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Refusal_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Waiting for next period</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>To_Waiting_For_Next_Period</targetReference>
+            </connector>
+            <label>Waiting for next period</label>
+        </rules>
+        <rules>
+            <name>Ignored</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Refusal_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Ignored</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>To_Ignored</targetReference>
+            </connector>
+            <label>Ignored</label>
+        </rules>
+    </decisions>
+    <description>A7, first trigger: filling a refusal reason on an open New clients or Repeat sales deal moves the same record to Reactivation. The refusal type picks the stage: waiting for next period and ignored land on their own stages, a true refusal lands on Deferred demand. The 5-to-7-days-silent trigger is the scheduled job SilentDealsJob (Apex).</description>
+    <environments>Default</environments>
+    <interviewLabel>A7 Refusal to Reactivation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>A7 Refusal to Reactivation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Reactivation_Record_Type</name>
+        <label>Get Reactivation record type</label>
+        <locationX>314</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Which_Refusal_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Opportunity</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Reactivation</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Reactivation_Record_Type</targetReference>
+        </connector>
+        <filterFormula>AND(ISCHANGED({!$Record.Refusal_Reason__c}), NOT(ISBLANK(TEXT({!$Record.Refusal_Reason__c}))), OR({!$Record.RecordType.DeveloperName} = &quot;New_Clients&quot;, {!$Record.RecordType.DeveloperName} = &quot;Repeat_Sales&quot;), NOT(ISPICKVAL({!$Record.StageName}, &quot;Closed Won&quot;)), NOT(ISPICKVAL({!$Record.StageName}, &quot;Closed Lost&quot;)))</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

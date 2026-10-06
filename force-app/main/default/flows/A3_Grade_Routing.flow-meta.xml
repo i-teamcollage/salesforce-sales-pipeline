@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <assignments>
+        <name>Route_To_Key_Call_Scheduled</name>
+        <label>Route to Key call scheduled</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Key call scheduled</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Route_To_Warm_Up</name>
+        <label>Route to Warm-up</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.StageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Warm-up</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Which_Grade</name>
+        <label>Which grade</label>
+        <locationX>314</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>No grade</defaultConnectorLabel>
+        <rules>
+            <name>Grade_A</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Grade__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>A</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Route_To_Key_Call_Scheduled</targetReference>
+            </connector>
+            <label>Grade A</label>
+        </rules>
+        <rules>
+            <name>Grade_B_Or_C</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Grade__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>B</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Grade__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>C</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Route_To_Warm_Up</targetReference>
+            </connector>
+            <label>Grade B or C</label>
+        </rules>
+    </decisions>
+    <description>A3: when a grade is set on a New clients deal that is still at New lead or Qualification in chat, grade A goes to Key call scheduled (stage 4) and grades B and C go to Warm-up (stage 3). The stage-gating rules still apply to the move.</description>
+    <environments>Default</environments>
+    <interviewLabel>A3 Grade routing {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>A3 Grade routing</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Which_Grade</targetReference>
+        </connector>
+        <filterFormula>AND(ISCHANGED({!$Record.Grade__c}), {!$Record.RecordType.DeveloperName} = &quot;New_Clients&quot;, OR(ISPICKVAL({!$Record.StageName}, &quot;New lead&quot;), ISPICKVAL({!$Record.StageName}, &quot;Qualification in chat&quot;)))</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

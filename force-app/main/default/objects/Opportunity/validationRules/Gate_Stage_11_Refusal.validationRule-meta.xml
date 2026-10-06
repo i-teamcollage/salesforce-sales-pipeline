@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Gate_Stage_11_Refusal</fullName>
+    <active>true</active>
+    <description>FL4 and A7. The stage 11 fields: a refusal reason always needs a refusal type, and every deal in Reactivation needs both.</description>
+    <errorConditionFormula>OR(AND(RecordType.DeveloperName = &quot;Reactivation&quot;, OR(ISBLANK(TEXT(Refusal_Reason__c)), ISBLANK(TEXT(Refusal_Type__c)))), AND(NOT(ISBLANK(TEXT(Refusal_Reason__c))), ISBLANK(TEXT(Refusal_Type__c))))</errorConditionFormula>
+    <errorMessage>A refusal needs both a refusal reason and a refusal type. Every deal in Reactivation has both.</errorMessage>
+</ValidationRule>

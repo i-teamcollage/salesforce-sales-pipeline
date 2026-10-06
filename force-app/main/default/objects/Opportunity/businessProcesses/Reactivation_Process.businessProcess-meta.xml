@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reactivation_Process</fullName>
+    <description>Stages of pipeline 2, Reactivation.</description>
+    <isActive>true</isActive>
+    <values>
+        <fullName>Deferred demand</fullName>
+    </values>
+    <values>
+        <fullName>Waiting for next period</fullName>
+    </values>
+    <values>
+        <fullName>Ignored</fullName>
+    </values>
+    <values>
+        <fullName>Regular touches</fullName>
+    </values>
+    <values>
+        <fullName>Dialogue resumed</fullName>
+    </values>
+    <values>
+        <fullName>Closed Lost</fullName>
+    </values>
+</BusinessProcess>

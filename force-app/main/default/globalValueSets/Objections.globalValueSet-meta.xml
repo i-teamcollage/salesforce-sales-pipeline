@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Price</fullName>
+        <default>false</default>
+        <label>Price</label>
+    </customValue>
+    <customValue>
+        <fullName>Timing</fullName>
+        <default>false</default>
+        <label>Timing</label>
+    </customValue>
+    <customValue>
+        <fullName>Doubts about results</fullName>
+        <default>false</default>
+        <label>Doubts about results</label>
+    </customValue>
+    <customValue>
+        <fullName>Needs to consult someone</fullName>
+        <default>false</default>
+        <label>Needs to consult someone</label>
+    </customValue>
+    <customValue>
+        <fullName>Format does not fit</fullName>
+        <default>false</default>
+        <label>Format does not fit</label>
+    </customValue>
+    <customValue>
+        <fullName>Comparing schools</fullName>
+        <default>false</default>
+        <label>Comparing schools</label>
+    </customValue>
+    <description>Objections recorded at Closing. The client provides the final list.</description>
+    <masterLabel>Objections</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

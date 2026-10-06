@@ -1,0 +1,46 @@
+<!doctype html>
+<!--
+  A1: the website's application form, as a Salesforce Web-to-Lead form.
+  Each submission creates a Lead; LeadTrigger converts it into an Account, a Contact and a deal in
+  New clients at New lead, with its source and request type filled.
+
+  Before use, replace three placeholders with the values from Setup > Web-to-Lead > Create Web-to-Lead Form
+  (tick "Request type" and "UTM source" in the field list, then copy the ids from the generated HTML):
+    YOUR_ORG_ID              your organization id
+    REQUEST_TYPE_FIELD_ID    the id Salesforce gives the Request type field (starts with 00N)
+    UTM_SOURCE_FIELD_ID      the id of the UTM source field (starts with 00N)
+  The consultation form is the same page with the request type set to "Consultation".
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apply to a Quorvale cohort</title>
+</head>
+<body>
+  <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&amp;orgId=YOUR_ORG_ID" method="POST">
+    <input type="hidden" name="oid" value="YOUR_ORG_ID">
+    <input type="hidden" name="retURL" value="https://www.example.com/thank-you">
+    <input type="hidden" name="REQUEST_TYPE_FIELD_ID" value="Application">
+    <input type="hidden" name="UTM_SOURCE_FIELD_ID" id="utm_source" value="">
+
+    <label for="first_name">First name</label>
+    <input id="first_name" name="first_name" maxlength="40" required>
+
+    <label for="last_name">Last name</label>
+    <input id="last_name" name="last_name" maxlength="80" required>
+
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" maxlength="80" required>
+
+    <label for="phone">Phone or messenger number</label>
+    <input id="phone" name="phone" maxlength="40">
+
+    <button type="submit">Apply</button>
+  </form>
+  <script>
+    // Pass the ad's utm_source on to Salesforce. A1 maps it to a source; an unknown tag never loses the lead.
+    document.getElementById('utm_source').value = new URLSearchParams(window.location.search).get('utm_source') || '';
+  </script>
+</body>
+</html>

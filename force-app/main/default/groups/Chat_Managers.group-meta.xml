@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Group xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>AC4. Chat managers. A criteria-based sharing rule gives this group every New clients and Reactivation deal.</description>
+    <doesIncludeBosses>false</doesIncludeBosses>
+    <name>Chat managers</name>
+</Group>

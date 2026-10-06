@@ -1,0 +1,68 @@
+{
+  "title": "Salesforce sales pipeline: acceptance test",
+  "items": 71,
+  "recorded_at": null,
+  "org_run": "pending",
+  "requirements": 32,
+  "apex_test_methods": 56,
+  "node_tests": 15,
+  "static_tests": 125,
+  "criteria": [
+    {
+      "id": "requirements_covered",
+      "label": "Brief requirements implemented with a passing test",
+      "metric": "requirements_covered",
+      "op": "==",
+      "target": 1.0,
+      "unit": "rate",
+      "value": null,
+      "hits": null,
+      "total": null,
+      "interval": null,
+      "passed": false
+    },
+    {
+      "id": "org_tests_passing",
+      "label": "Apex tests passing in a real Salesforce org",
+      "metric": "org_tests_passing",
+      "op": "==",
+      "target": 1.0,
+      "unit": "rate",
+      "value": null,
+      "hits": null,
+      "total": null,
+      "interval": null,
+      "passed": false
+    },
+    {
+      "id": "apex_coverage",
+      "label": "Apex code covered by tests",
+      "metric": "apex_coverage",
+      "op": ">=",
+      "target": 0.9,
+      "unit": "rate",
+      "value": null,
+      "hits": null,
+      "total": null,
+      "interval": null,
+      "passed": false
+    },
+    {
+      "id": "static_checks",
+      "label": "Metadata conformance checks passing",
+      "metric": "static_checks",
+      "op": "==",
+      "target": 1.0,
+      "unit": "rate",
+      "value": 1.0,
+      "hits": 125,
+      "total": 125,
+      "interval": [
+        0.9701835432034374,
+        1.0
+      ],
+      "passed": true
+    }
+  ],
+  "passed": false
+}

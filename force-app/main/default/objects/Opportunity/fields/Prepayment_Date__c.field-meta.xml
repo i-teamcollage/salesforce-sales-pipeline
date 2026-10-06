@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prepayment_Date__c</fullName>
+    <description>Brief field 16. Required from stage 8. With the payment method, triggers A8.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>When the prepayment arrived. Sets the start period and the target full-payment date.</inlineHelpText>
+    <label>Prepayment date</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

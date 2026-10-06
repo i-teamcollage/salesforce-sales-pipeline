@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Closer__c</fullName>
+    <description>Brief field 11. Required from stage 4. The closer who runs the key call; becomes the deal owner when the call is booked (A4).</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The closer who runs the key call. They become the owner when the call is booked.</inlineHelpText>
+    <label>Closer</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Closer_Deals</relationshipName>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

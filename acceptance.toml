@@ -1,0 +1,32 @@
+# Acceptance test for the Salesforce sales pipeline.
+# The targets come from the design spec (section 9), written before the build. Never lowered to make a run pass.
+
+title = "Salesforce sales pipeline: acceptance test"
+
+[[criteria]]
+id = "requirements_covered"
+label = "Brief requirements implemented with a passing test"
+metric = "requirements_covered"
+op = "=="
+target = 1.0
+
+[[criteria]]
+id = "org_tests_passing"
+label = "Apex tests passing in a real Salesforce org"
+metric = "org_tests_passing"
+op = "=="
+target = 1.0
+
+[[criteria]]
+id = "apex_coverage"
+label = "Apex code covered by tests"
+metric = "apex_coverage"
+op = ">="
+target = 0.90
+
+[[criteria]]
+id = "static_checks"
+label = "Metadata conformance checks passing"
+metric = "static_checks"
+op = "=="
+target = 1.0

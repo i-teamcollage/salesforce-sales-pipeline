@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Objection__c</fullName>
+    <description>Brief field 14. Required from stage 7. Filled by the chat manager.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The client's main objection. Needed to move past Closing.</inlineHelpText>
+    <label>Objection</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetName>Objections</valueSetName>
+    </valueSet>
+</CustomField>
