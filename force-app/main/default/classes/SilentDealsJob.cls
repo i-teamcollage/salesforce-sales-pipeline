@@ -6,6 +6,7 @@
  * has paid, so silence is not a refusal. With no reply recorded, the deal's creation time counts.
  *
  * Schedule it once after deploying:  SilentDealsJob.scheduleDaily();
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class SilentDealsJob implements Schedulable, Database.Batchable<SObject> {
     public static final String JOB_NAME = 'A7 silent deals to Reactivation';
@@ -30,6 +31,7 @@ public without sharing class SilentDealsJob implements Schedulable, Database.Bat
             WHERE RecordTypeId = :newClients AND StageName IN :stages
                 AND ((Last_Client_Reply_At__c != NULL AND Last_Client_Reply_At__c < :cutoff)
                     OR (Last_Client_Reply_At__c = NULL AND CreatedDate < :cutoff))
+            WITH SYSTEM_MODE
         ]);
     }
 
@@ -42,7 +44,7 @@ public without sharing class SilentDealsJob implements Schedulable, Database.Bat
             deal.Refusal_Type__c = Pipelines.IGNORED;
         }
         // A deal that cannot be saved stays where it is; the next run tries again.
-        Database.update(scope, false);
+        Database.update(scope, false, AccessLevel.SYSTEM_MODE);
     }
 
     public void finish(Database.BatchableContext context) {

@@ -24,14 +24,14 @@ private class ExportTest {
         refused.Name = 'Refused deal';
         Opportunity repeat = TestData.deal(Pipelines.REPEAT_SALES, Pipelines.BUILDING_BASE, null);
         repeat.Name = 'Repeat deal';
-        Opportunity other = new Opportunity(Name = 'Not a pipeline deal', StageName = 'Qualify', CloseDate = Date.today(),
-            RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByDeveloperName().get('Master').getRecordTypeId());
-        insert new List<Opportunity>{ won, refused, repeat, other };
+        // No record type: the running user's default, the master record type (Salesforce refuses its id when named).
+        Opportunity other = new Opportunity(Name = 'Not a pipeline deal', StageName = 'Qualify', CloseDate = Date.today());
+        insert as system new List<Opportunity>{ won, refused, repeat, other };
     }
 
     @isTest
     static void EX1_exportUserReadsEveryDealAndWritesNothing() {
-        Id wonId = [SELECT Id FROM Opportunity WHERE Name = 'Won deal'].Id;
+        Id wonId = [SELECT Id FROM Opportunity WHERE Name = 'Won deal' WITH SYSTEM_MODE].Id;
         System.runAs(TestData.user('export')) {
             List<Opportunity> rows = Database.query(EXPORT_SOQL, AccessLevel.USER_MODE);
             Assert.areEqual(3, rows.size(), 'every deal of the three pipelines, nothing else');
@@ -42,9 +42,9 @@ private class ExportTest {
 
     @isTest
     static void EX3_queryReturnsTheTwentyFiveColumnsOfEveryDeal() {
-        Id wonId = [SELECT Id FROM Opportunity WHERE Name = 'Won deal'].Id;
+        Id wonId = [SELECT Id FROM Opportunity WHERE Name = 'Won deal' WITH SYSTEM_MODE].Id;
         Opportunity row = null;
-        for (Opportunity deal : Database.query(EXPORT_SOQL)) {
+        for (Opportunity deal : Database.query(EXPORT_SOQL, AccessLevel.SYSTEM_MODE)) {
             if (deal.Id == wonId) {
                 row = deal;
             }
@@ -65,7 +65,7 @@ private class ExportTest {
     static void EX3_closingADealStampsItsCloseDate() {
         Opportunity deal = TestData.insertDeal(Pipelines.NEW_CLIENTS, Pipelines.HANDED_OVER, UserInfo.getUserId());
         Assert.areNotEqual(Date.today(), deal.CloseDate, 'an open deal has a planned date');
-        update new Opportunity(Id = deal.Id, StageName = Pipelines.CLOSED_WON);
+        update as system new Opportunity(Id = deal.Id, StageName = Pipelines.CLOSED_WON);
         Assert.areEqual(Date.today(), TestData.reload(deal.Id).CloseDate, 'the day it closed');
     }
 }

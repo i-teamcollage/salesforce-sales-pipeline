@@ -7,13 +7,13 @@ private class ReactivationTest {
     static void A7_refusalReasonMovesTheSameDealToReactivation() {
         Opportunity deal = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.WARM_UP, null);
         deal.Source__c = 'Partner';
-        insert deal;
-        update new Opportunity(Id = deal.Id, Refusal_Reason__c = 'Price', Refusal_Type__c = 'True refusal');
+        insert as system deal;
+        update as system new Opportunity(Id = deal.Id, Refusal_Reason__c = 'Price', Refusal_Type__c = 'True refusal');
         Opportunity updated = TestData.reload(deal.Id);
         Assert.areEqual(Pipelines.REACTIVATION, updated.RecordType.DeveloperName, 'moved to Reactivation');
         Assert.areEqual(Pipelines.DEFERRED_DEMAND, updated.StageName, 'a true refusal lands on Deferred demand');
         Assert.areEqual('Partner', updated.Source__c, 'same record, same source');
-        Assert.areEqual(1, [SELECT COUNT() FROM Opportunity], 'nothing was copied');
+        Assert.areEqual(1, [SELECT COUNT() FROM Opportunity WITH SYSTEM_MODE], 'nothing was copied');
     }
 
     @isTest
@@ -21,8 +21,8 @@ private class ReactivationTest {
         Opportunity waiting = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.CLOSING, UserInfo.getUserId());
         Opportunity ignored = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.NEW_LEAD, null);
         Opportunity repeat = TestData.deal(Pipelines.REPEAT_SALES, Pipelines.ANNOUNCEMENT, null);
-        insert new List<Opportunity>{ waiting, ignored, repeat };
-        update new List<Opportunity>{
+        insert as system new List<Opportunity>{ waiting, ignored, repeat };
+        update as system new List<Opportunity>{
             new Opportunity(Id = waiting.Id, Refusal_Reason__c = 'Timing', Refusal_Type__c = 'Waiting for next period'),
             new Opportunity(Id = ignored.Id, Refusal_Reason__c = 'Personal circumstances', Refusal_Type__c = 'Ignored'),
             new Opportunity(Id = repeat.Id, Refusal_Reason__c = 'Program does not fit', Refusal_Type__c = 'True refusal')
@@ -43,7 +43,7 @@ private class ReactivationTest {
         Opportunity silentClosing = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.CLOSING, UserInfo.getUserId());
         silentClosing.Last_Client_Reply_At__c = Datetime.now().addDays(-(days + 1));
         Opportunity prepaid = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.PREPAYMENT_RECEIVED, UserInfo.getUserId());
-        insert new List<Opportunity>{ silentNew, repliedRecently, silentClosing, prepaid };
+        insert as system new List<Opportunity>{ silentNew, repliedRecently, silentClosing, prepaid };
         Test.setCreatedDate(silentNew.Id, Datetime.now().addDays(-(days + 1)));
         Test.setCreatedDate(repliedRecently.Id, Datetime.now().addDays(-30));
         Test.setCreatedDate(prepaid.Id, Datetime.now().addDays(-30));
@@ -78,7 +78,7 @@ private class ReactivationTest {
         Test.startTest();
         Id jobId = SilentDealsJob.scheduleDaily();
         Test.stopTest();
-        CronTrigger cron = [SELECT CronExpression FROM CronTrigger WHERE Id = :jobId];
+        CronTrigger cron = [SELECT CronExpression FROM CronTrigger WHERE Id = :jobId WITH SYSTEM_MODE];
         Assert.areEqual(SilentDealsJob.DAILY_AT_SEVEN, cron.CronExpression, 'every day at 07:00');
     }
 }

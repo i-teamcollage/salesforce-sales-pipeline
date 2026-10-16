@@ -38,13 +38,15 @@ def slim(raw: dict) -> dict:
         for row in rows
     ]
     started = str(summary.get("testStartTime") or "")
+    outcomes = [test["outcome"] for test in tests]
+    # Counted from the tests themselves: Salesforce's summary also counts each class's @testSetup method.
     return {
         "recorded_at": started[:10] or None,
         "outcome": summary.get("outcome"),
-        "tests_ran": summary.get("testsRan", len(tests)),
-        "passing": summary.get("passing"),
-        "failing": summary.get("failing"),
-        "skipped": summary.get("skipped"),
+        "tests_ran": len(tests),
+        "passing": outcomes.count("Pass"),
+        "failing": sum(1 for outcome in outcomes if outcome in ("Fail", "CompileFail")),
+        "skipped": outcomes.count("Skip"),
         "test_run_coverage": summary.get("testRunCoverage"),
         "org_wide_coverage": summary.get("orgWideCoverage"),
         "tests": sorted(tests, key=lambda t: (t["class"] or "", t["method"] or "")),

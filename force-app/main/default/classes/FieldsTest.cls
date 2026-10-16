@@ -80,7 +80,7 @@ private class FieldsTest {
         }
         Database.SaveResult free = Database.insert(new Opportunity(Name = 'Free text', StageName = 'New lead',
             CloseDate = Date.today(), RecordTypeId = Pipelines.recordTypeId(Pipelines.NEW_CLIENTS),
-            Grade__c = 'Very good'), false);
+            Grade__c = 'Very good'), false, AccessLevel.SYSTEM_MODE);
         Assert.isFalse(free.isSuccess(), 'a value outside the list is refused');
     }
 
@@ -92,13 +92,13 @@ private class FieldsTest {
         Opportunity deal = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.NEW_LEAD, null);
         deal.OwnerId = chatManager.Id;
         deal.Lead_Author__c = head.Id;
-        insert deal;
+        insert as system deal;
         Assert.areEqual(chatManager.Id, TestData.reload(deal.Id).Lead_Author__c, 'the owner at creation, not what was typed');
 
-        Database.SaveResult change = Database.update(new Opportunity(Id = deal.Id, Lead_Author__c = head.Id), false);
+        Database.SaveResult change = Database.update(new Opportunity(Id = deal.Id, Lead_Author__c = head.Id), false, AccessLevel.SYSTEM_MODE);
         Assert.isTrue(TestData.failedWith(change, 'The lead author is set once'), String.valueOf(change.getErrors()));
 
-        update new Opportunity(Id = deal.Id, Key_Call_At__c = Datetime.now().addDays(1), Closer__c = TestData.user('closer1').Id);
+        update as system new Opportunity(Id = deal.Id, Key_Call_At__c = Datetime.now().addDays(1), Closer__c = TestData.user('closer1').Id);
         Opportunity updated = TestData.reload(deal.Id);
         Assert.areEqual(TestData.user('closer1').Id, updated.OwnerId, 'A4 handed the deal to the closer');
         Assert.areEqual(chatManager.Id, updated.Lead_Author__c, 'the lead author survives the hand-over');
@@ -107,19 +107,19 @@ private class FieldsTest {
     @isTest
     static void FL5_warmUpTouchesCountCompletedTasksDuringWarmUp() {
         Opportunity deal = TestData.insertDeal(Pipelines.NEW_CLIENTS, Pipelines.WARM_UP, null);
-        insert new List<Task>{
+        insert as system new List<Task>{
             new Task(WhatId = deal.Id, Subject = 'Sent the program guide', Status = 'Completed'),
             new Task(WhatId = deal.Id, Subject = 'Shared a graduate story', Status = 'Completed')
         };
         Task open = new Task(WhatId = deal.Id, Subject = 'Follow up on the guide', Status = 'Not Started');
-        insert open;
+        insert as system open;
         Assert.areEqual(2, TestData.reload(deal.Id).Warm_Up_Touches__c.intValue(), 'two completed touches');
 
-        update new Task(Id = open.Id, Status = 'Completed');
+        update as system new Task(Id = open.Id, Status = 'Completed');
         Assert.areEqual(3, TestData.reload(deal.Id).Warm_Up_Touches__c.intValue(), 'completing a task counts');
 
-        update new Opportunity(Id = deal.Id, StageName = Pipelines.KEY_CALL_SCHEDULED);
-        insert new Task(WhatId = deal.Id, Subject = 'After warm-up', Status = 'Completed');
+        update as system new Opportunity(Id = deal.Id, StageName = Pipelines.KEY_CALL_SCHEDULED);
+        insert as system new Task(WhatId = deal.Id, Subject = 'After warm-up', Status = 'Completed');
         Assert.areEqual(3, TestData.reload(deal.Id).Warm_Up_Touches__c.intValue(), 'only Warm-up touches count');
     }
 
@@ -127,13 +127,13 @@ private class FieldsTest {
     static void FL6_startPeriodIsTheMonthAfterThePrepayment() {
         Opportunity deal = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.NEW_LEAD, null);
         deal.Prepayment_Date__c = Date.newInstance(2026, 10, 5);
-        insert deal;
+        insert as system deal;
         Assert.areEqual('2026-11', TestData.reload(deal.Id).Start_Period__c);
 
-        update new Opportunity(Id = deal.Id, Prepayment_Date__c = Date.newInstance(2026, 12, 14));
+        update as system new Opportunity(Id = deal.Id, Prepayment_Date__c = Date.newInstance(2026, 12, 14));
         Assert.areEqual('2027-01', TestData.reload(deal.Id).Start_Period__c, 'the year rolls over');
 
-        update new Opportunity(Id = deal.Id, Prepayment_Date__c = null);
+        update as system new Opportunity(Id = deal.Id, Prepayment_Date__c = null);
         Assert.isTrue(String.isBlank(TestData.reload(deal.Id).Start_Period__c), 'empty until the client prepays');
     }
 }

@@ -155,9 +155,11 @@ and its old refusal reason, type and Ignored tag are cleared, so a second refusa
 is called "Qualification in chat" so it never clashes with it.
 
 **24. Settings and export rights.** "Settings" for the head of sales means Customize Application, which
-lets them edit the Custom Metadata settings above. A permission set cannot take away a right that a
-profile grants, so closers and chat managers get the "Minimum Access - Salesforce" profile and all their
-rights from their role's permission set. That is how they end up with neither Delete nor Export Reports.
+lets them edit the Custom Metadata settings above. Salesforce grants it only together with Manage Custom
+Permissions and Manage Translation, so their permission set has those two as well. A permission set cannot
+take away a right that a profile grants, so closers and chat managers get the "Minimum Access - Salesforce"
+profile and all their rights from their role's permission set. That is how they end up with neither Delete
+nor Export Reports.
 
 **25. Round-robin.** The project ships no assignment rules. Web leads belong to the default lead creator
 set in the Web-to-Lead settings (the chat manager), and the deal keeps that owner until A4.

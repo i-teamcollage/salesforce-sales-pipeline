@@ -4,6 +4,7 @@
  * tasks go to the chat manager: a reminder to the client before the target date, and a check on it.
  * The check task's due date is the target date. If the prepayment date or the method changes later,
  * the open control tasks move to the new dates instead of being duplicated.
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class PaymentControl {
     public static Date targetDate(Opportunity deal) {
@@ -44,6 +45,6 @@ public without sharing class PaymentControl {
                 tasks.add(task);
             }
         }
-        upsert tasks;
+        upsert as system tasks;
     }
 }

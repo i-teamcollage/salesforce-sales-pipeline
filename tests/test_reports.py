@@ -34,6 +34,12 @@ def test_a_stored_run_keeps_outcomes_and_coverage_but_nothing_private():
         assert private not in text
 
 
+def test_a_stored_run_counts_test_methods_not_the_setup_methods_salesforce_adds_to_its_summary():
+    raw = {"result": {**RAW["result"], "summary": {**RAW["result"]["summary"], "testsRan": 3, "passing": 2}}}
+    run = save_org_run.slim(raw)
+    assert (run["tests_ran"], run["passing"], run["failing"]) == (2, 1, 1)
+
+
 def test_org_criteria_count_only_this_projects_apex():
     measures, apex = acceptance_run.org_measures(save_org_run.slim(RAW), {"KeyCallService"})
     assert apex == {"GradeRoutingTest.A3_gradeAGoesToKeyCallScheduled": True,

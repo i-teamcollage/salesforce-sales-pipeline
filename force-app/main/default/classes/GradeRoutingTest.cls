@@ -13,8 +13,8 @@ private class GradeRoutingTest {
     @isTest
     static void A3_gradeAGoesToKeyCallScheduled() {
         Opportunity deal = qualifiedWithoutGrade();
-        insert deal;
-        update new Opportunity(Id = deal.Id, Grade__c = 'A');
+        insert as system deal;
+        update as system new Opportunity(Id = deal.Id, Grade__c = 'A');
         Assert.areEqual(Pipelines.KEY_CALL_SCHEDULED, TestData.reload(deal.Id).StageName);
     }
 
@@ -22,8 +22,8 @@ private class GradeRoutingTest {
     static void A3_gradesBAndCGoToWarmUp() {
         Opportunity gradeB = qualifiedWithoutGrade();
         Opportunity gradeC = qualifiedWithoutGrade();
-        insert new List<Opportunity>{ gradeB, gradeC };
-        update new List<Opportunity>{
+        insert as system new List<Opportunity>{ gradeB, gradeC };
+        update as system new List<Opportunity>{
             new Opportunity(Id = gradeB.Id, Grade__c = 'B'),
             new Opportunity(Id = gradeC.Id, Grade__c = 'C')
         };
@@ -35,7 +35,7 @@ private class GradeRoutingTest {
     static void A3_laterStagesAndOtherPipelinesAreNotRouted() {
         Opportunity closing = TestData.insertDeal(Pipelines.NEW_CLIENTS, Pipelines.CLOSING, UserInfo.getUserId());
         Opportunity repeat = TestData.insertDeal(Pipelines.REPEAT_SALES, Pipelines.CLARIFYING, null);
-        update new List<Opportunity>{
+        update as system new List<Opportunity>{
             new Opportunity(Id = closing.Id, Grade__c = 'A'),
             new Opportunity(Id = repeat.Id, Grade__c = 'A')
         };

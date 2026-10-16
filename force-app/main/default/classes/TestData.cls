@@ -28,7 +28,7 @@ public class TestData {
     /** Creates the team: one user per role, with the role's permission set and public group. */
     public static void createTeam() {
         System.runAs(new User(Id = UserInfo.getUserId())) {
-            Id profileId = [SELECT Id FROM Profile WHERE Name = :PROFILE_NAME LIMIT 1].Id;
+            Id profileId = [SELECT Id FROM Profile WHERE Name = :PROFILE_NAME WITH SYSTEM_MODE LIMIT 1].Id;
             Map<String, User> users = new Map<String, User>();
             for (String alias : ROLES.keySet()) {
                 users.put(alias, new User(
@@ -37,9 +37,9 @@ public class TestData {
                     ProfileId = profileId, TimeZoneSidKey = 'Europe/Berlin', LocaleSidKey = 'en_GB',
                     EmailEncodingKey = 'UTF-8', LanguageLocaleKey = 'en_US'));
             }
-            insert users.values();
+            insert as system users.values();
             Map<String, Id> permissionSets = new Map<String, Id>();
-            for (PermissionSet permissionSet : [SELECT Id, Name FROM PermissionSet WHERE Name IN :ROLES.values()]) {
+            for (PermissionSet permissionSet : [SELECT Id, Name FROM PermissionSet WHERE Name IN :ROLES.values() WITH SYSTEM_MODE]) {
                 permissionSets.put(permissionSet.Name, permissionSet.Id);
             }
             List<PermissionSetAssignment> assignments = new List<PermissionSetAssignment>();
@@ -47,21 +47,47 @@ public class TestData {
                 assignments.add(new PermissionSetAssignment(
                     AssigneeId = users.get(alias).Id, PermissionSetId = permissionSets.get(ROLES.get(alias))));
             }
-            insert assignments;
+            insert as system assignments;
             Map<String, Id> groups = new Map<String, Id>();
-            for (Group publicGroup : [SELECT Id, DeveloperName FROM Group WHERE DeveloperName IN ('Chat_Managers', 'Assistants')]) {
+            for (Group publicGroup : [SELECT Id, DeveloperName FROM Group WHERE DeveloperName IN ('Chat_Managers', 'Assistants') WITH SYSTEM_MODE]) {
                 groups.put(publicGroup.DeveloperName, publicGroup.Id);
             }
-            insert new List<GroupMember>{
+            insert as system new List<GroupMember>{
                 new GroupMember(GroupId = groups.get('Chat_Managers'), UserOrGroupId = users.get('chatmgr').Id),
                 new GroupMember(GroupId = groups.get('Assistants'), UserOrGroupId = users.get('assist').Id)
             };
         }
     }
 
+    /**
+     * The shares the two criteria-based sharing rules create. Salesforce applies those rules just after a
+     * transaction commits, and a test never commits (checked in a Developer Edition, also after Test.stopTest),
+     * so a test of what a role sees adds them here. tests/test_access.py checks the rules themselves.
+     */
+    public static void shareAsTheRulesDo(List<Opportunity> deals) {
+        Map<String, Id> groups = new Map<String, Id>();
+        for (Group publicGroup : [SELECT Id, DeveloperName FROM Group WHERE DeveloperName IN ('Chat_Managers', 'Assistants') WITH SYSTEM_MODE]) {
+            groups.put(publicGroup.DeveloperName, publicGroup.Id);
+        }
+        List<OpportunityShare> shares = new List<OpportunityShare>();
+        for (Opportunity deal : [SELECT Id, RecordType.DeveloperName, StageName FROM Opportunity WHERE Id IN :deals WITH SYSTEM_MODE]) {
+            String pipeline = deal.RecordType.DeveloperName;
+            if (pipeline == Pipelines.NEW_CLIENTS || pipeline == Pipelines.REACTIVATION) {
+                shares.add(new OpportunityShare(OpportunityId = deal.Id, UserOrGroupId = groups.get('Chat_Managers'),
+                    OpportunityAccessLevel = 'Edit'));
+            }
+            if (pipeline == Pipelines.NEW_CLIENTS
+                && (deal.StageName == Pipelines.PAYMENT_RECEIVED || deal.StageName == Pipelines.HANDED_OVER)) {
+                shares.add(new OpportunityShare(OpportunityId = deal.Id, UserOrGroupId = groups.get('Assistants'),
+                    OpportunityAccessLevel = 'Edit'));
+            }
+        }
+        insert as system shares;
+    }
+
     public static User user(String alias) {
         String username = alias + '@' + domain();
-        return [SELECT Id, Alias, ProfileId FROM User WHERE Username = :username LIMIT 1];
+        return [SELECT Id, Alias, ProfileId FROM User WHERE Username = :username WITH SYSTEM_MODE LIMIT 1];
     }
 
     /** A time on the hour, about this many hours ahead (stored date-times drop milliseconds). */
@@ -125,7 +151,7 @@ public class TestData {
 
     public static Opportunity insertDeal(String pipeline, String stage, Id closerId) {
         Opportunity created = deal(pipeline, stage, closerId);
-        insert created;
+        insert as system created;
         return reload(created.Id);
     }
 
@@ -136,6 +162,7 @@ public class TestData {
                 Key_Call_Booked_On__c, Refusal_Reason__c, Refusal_Type__c, Prepayment_Date__c, Payment_Method__c,
                 Start_Period__c, Stage_Order__c, CloseDate, AccountId
             FROM Opportunity WHERE Id = :dealId
+            WITH SYSTEM_MODE
         ];
     }
 

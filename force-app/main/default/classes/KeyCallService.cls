@@ -5,6 +5,7 @@
  * TR4: a repeat-sales deal continues in New clients, as the same record, once its call is booked.
  * A6: a deal moves to Key call held only when its key-call meeting has a recording link.
  * A reschedule is a new booking: the meeting and the open confirmation tasks move with the call.
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class KeyCallService {
     public static final Integer CALL_MINUTES = 60;
@@ -50,6 +51,7 @@ public without sharing class KeyCallService {
         for (Event meeting : [
             SELECT Id, WhatId FROM Event
             WHERE WhatId IN :ids AND Automation__c = :Activities.A4_KEY_CALL AND StartDateTime > :Datetime.now()
+            WITH SYSTEM_MODE
             ORDER BY StartDateTime
         ]) {
             if (!upcoming.containsKey(meeting.WhatId)) {
@@ -85,8 +87,8 @@ public without sharing class KeyCallService {
                 tasks.add(task);
             }
         }
-        upsert events;
-        upsert tasks;
+        upsert as system events;
+        upsert as system tasks;
     }
 
     /** Due a number of hours before the call, or now when that moment has already passed. */
@@ -113,6 +115,7 @@ public without sharing class KeyCallService {
         for (Event meeting : [
             SELECT WhatId FROM Event
             WHERE WhatId IN :movingIds AND Automation__c = :Activities.A4_KEY_CALL AND Recording_URL__c != NULL
+            WITH SYSTEM_MODE
         ]) {
             withRecording.add(meeting.WhatId);
         }

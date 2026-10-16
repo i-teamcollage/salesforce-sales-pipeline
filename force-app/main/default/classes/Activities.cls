@@ -1,6 +1,7 @@
 /**
  * Builds the tasks the automations create, and decides who gets them.
  * Every automated activity carries Automation__c, so an automation can find and move its own records.
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class Activities {
     public static final String A1_REPEAT_FORM = 'A1_Repeat_Form';
@@ -55,7 +56,10 @@ public without sharing class Activities {
                 authorIds.add(deal.Lead_Author__c);
             }
         }
-        Map<Id, User> active = new Map<Id, User>([SELECT Id FROM User WHERE Id IN :authorIds AND IsActive = TRUE]);
+        Map<Id, User> active = new Map<Id, User>([
+            SELECT Id FROM User WHERE Id IN :authorIds AND IsActive = TRUE
+            WITH SYSTEM_MODE
+        ]);
         Map<Id, Id> result = new Map<Id, Id>();
         for (Opportunity deal : deals) {
             Boolean usable = deal.Lead_Author__c != null && active.containsKey(deal.Lead_Author__c);
@@ -71,6 +75,7 @@ public without sharing class Activities {
             SELECT Id, WhatId, Automation__c, Due_At__c, ActivityDate, OwnerId
             FROM Task
             WHERE WhatId IN :dealIds AND Automation__c IN :automations AND IsClosed = FALSE
+            WITH SYSTEM_MODE
         ]) {
             if (!result.containsKey(task.WhatId)) {
                 result.put(task.WhatId, new List<Task>());

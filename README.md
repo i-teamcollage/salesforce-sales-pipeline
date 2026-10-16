@@ -50,19 +50,34 @@ test, 100% of the Apex tests passing in a real Salesforce org, at least 90% of t
 <!-- results:start -->
 | Criterion | Target | Measured | 95% interval | Result |
 |---|---|---|---|---|
-| Brief requirements implemented with a passing test | = 100% | n/a |  | FAIL |
-| Apex tests passing in a real Salesforce org | = 100% | n/a |  | FAIL |
-| Apex code covered by tests | ≥ 90% | n/a |  | FAIL |
-| Metadata conformance checks passing | = 100% | 100.0% | 97.0–100.0% | PASS |
+| Brief requirements implemented with a passing test | = 100% | 100.0% | 89.3–100.0% | PASS |
+| Apex tests passing in a real Salesforce org | = 100% | 100.0% | 93.6–100.0% | PASS |
+| Apex code covered by tests | ≥ 90% | 99.3% | 98.0–99.8% | PASS |
+| Metadata conformance checks passing | = 100% | 100.0% | 97.7–100.0% | PASS |
 
-71 made-up test cases.
+71 made-up test cases, recorded 2026-10-16.
 <!-- results:end -->
 
-The Apex tests have not run in an org yet. The org used for this build turned out to be a 30-day trial
-edition that does not allow Apex at all, so the three org figures stay "n/a" until the run is stored
-(`make org-test` in a Developer Edition). Everything that edition does allow was deployed to it: the
-pipelines, fields, validation rules, flows, permission sets and layout. Full results, per requirement, are
-in [reports/acceptance.md](reports/acceptance.md).
+The Apex tests ran in a free Salesforce Developer Edition on 16 October 2026: all 56 test methods
+passed, and they cover 99.3% of the project's Apex code. Full results, per requirement, are in
+[reports/acceptance.md](reports/acceptance.md).
+
+### What the first org run taught us
+
+Running the tests in a real org found three things that no check outside Salesforce could:
+
+- **Salesforce API 67.0 changed a default.** Apex now reads and writes data with the permissions of the
+  person who triggered it, unless the code says otherwise. The automations act for the business: a chat
+  manager who completes a task must still stamp a field nobody may edit by hand. So every automation
+  states system mode, the role tests state user mode, and a static check fails any query or write that
+  states neither.
+- **Converting a lead is heavy work for Salesforce itself.** In the Developer Edition, 50 leads converted
+  in one transaction and 100 hit the platform's limit, while our own code used fewer than 10 queries. So
+  an import of more than 50 form leads is converted in jobs of 50 that run right after the save. A single
+  web form still converts at once.
+- **Criteria-based sharing rules apply just after a save is committed, and a test never commits.** The
+  role tests therefore add the same shares the two rules create, a static check verifies the rules
+  themselves, and a deal saved in the Developer Edition got its rule share within 5 seconds.
 
 ## How the brief maps to Salesforce
 
@@ -132,7 +147,7 @@ reasons. It never writes back. The setup takes about ten minutes: [google-sheets
 | Where | What it proves |
 |---|---|
 | [Apex tests](force-app/main/default/classes/) | 56 test methods in 13 classes, each named after the requirement it proves, such as `A4_slotLessThanThreeHoursAheadIsRejected`. They create made-up leads and deals, run the automations, and check what each role can see and do with `System.runAs`. |
-| [Static checks](tests/) | Python reads the metadata XML: stage lists, field types, a validation rule for every gated field, permission sets without Delete or Export for the restricted roles, the sharing rules. |
+| [Static checks](tests/) | Python reads the metadata XML: stage lists, field types, a validation rule for every gated field, permission sets without Delete or Export for the restricted roles, the sharing rules, and an access mode on every query and write in the Apex. |
 | [Node tests](google-sheets/transform.test.js) | The export's row mapping and every dashboard formula, checked against made-up deals. |
 | [Traceability](docs/traceability.md) | Generated from the brief and the tests. CI fails if any requirement loses its last test. |
 

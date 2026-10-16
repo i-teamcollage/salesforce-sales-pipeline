@@ -36,14 +36,15 @@ private class PipelinesTest {
         for (String stage : stages) {
             deals.add(TestData.deal(pipeline, stage, UserInfo.getUserId()));
         }
-        List<Database.SaveResult> results = Database.insert(deals, false);
+        List<Database.SaveResult> results = Database.insert(deals, false, AccessLevel.SYSTEM_MODE);
         for (Integer i = 0; i < results.size(); i++) {
             Assert.isTrue(results[i].isSuccess(), stages[i] + ' is accepted in ' + pipeline + ': ' + results[i].getErrors());
         }
     }
 
     private static void assertRejected(String pipeline, String foreignStage) {
-        Database.SaveResult result = Database.insert(TestData.deal(pipeline, foreignStage, UserInfo.getUserId()), false);
+        // No closer, so no key call is booked: a booking moves a repeat-sales deal on to New clients (TR4).
+        Database.SaveResult result = Database.insert(TestData.deal(pipeline, foreignStage, null), false, AccessLevel.SYSTEM_MODE);
         Assert.isTrue(TestData.failedWith(result, 'This stage is not in the deal'),
             foreignStage + ' must be rejected in ' + pipeline + ': ' + result.getErrors());
     }
@@ -51,7 +52,7 @@ private class PipelinesTest {
     @isTest
     static void PL1_newClientsHasElevenStagesInOrder() {
         assertPipelineAccepts(Pipelines.NEW_CLIENTS, NEW_CLIENTS_STAGES);
-        List<Opportunity> deals = [SELECT StageName, Stage_Order__c FROM Opportunity WHERE RecordType.DeveloperName = 'New_Clients'];
+        List<Opportunity> deals = [SELECT StageName, Stage_Order__c FROM Opportunity WHERE RecordType.DeveloperName = 'New_Clients' WITH SYSTEM_MODE];
         Assert.areEqual(11, deals.size(), 'one deal per stage');
         for (Opportunity deal : deals) {
             Integer expected = deal.StageName == 'Conditional refusal' ? 0 : NEW_CLIENTS_STAGES.indexOf(deal.StageName) + 1;
@@ -69,7 +70,7 @@ private class PipelinesTest {
     static void PL2_reactivationHasFiveStagesInOrder() {
         assertPipelineAccepts(Pipelines.REACTIVATION, REACTIVATION_STAGES);
         assertRejected(Pipelines.REACTIVATION, 'Closing');
-        for (Opportunity deal : [SELECT Stage_Order__c FROM Opportunity WHERE RecordType.DeveloperName = 'Reactivation']) {
+        for (Opportunity deal : [SELECT Stage_Order__c FROM Opportunity WHERE RecordType.DeveloperName = 'Reactivation' WITH SYSTEM_MODE]) {
             Assert.areEqual(0, deal.Stage_Order__c.intValue(), 'Reactivation stages are not gated');
         }
     }
@@ -80,7 +81,11 @@ private class PipelinesTest {
         for (String laterStage : new List<String>{ 'Key call confirmed', 'Key call held', 'Closing', 'Handed over to preparation' }) {
             assertRejected(Pipelines.REPEAT_SALES, laterStage);
         }
-        Opportunity keyCall = [SELECT Stage_Order__c FROM Opportunity WHERE RecordType.DeveloperName = 'Repeat_Sales' AND StageName = 'Key call scheduled'];
+        Opportunity keyCall = [
+            SELECT Stage_Order__c FROM Opportunity
+            WHERE RecordType.DeveloperName = 'Repeat_Sales' AND StageName = 'Key call scheduled'
+            WITH SYSTEM_MODE
+        ];
         Assert.areEqual(4, keyCall.Stage_Order__c.intValue(), 'Repeat sales stage 4 is the shared Key call scheduled');
     }
 }

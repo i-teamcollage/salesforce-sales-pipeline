@@ -5,9 +5,13 @@
  * RR1: no assignment rule runs. The deal keeps the lead's owner, the default lead creator.
  * A person who already has an open deal gets a task on that deal instead of a second deal (brief review 14).
  * If anything fails, the conversion is rolled back and the lead simply stays a lead: nothing is lost.
+ * NF1: about 50 conversions fit in one transaction, because Salesforce's own work for each converted lead is
+ * heavy (measured in a Developer Edition: 50 leads converted, 100 hit the limit). A larger batch, such as an
+ * import of a month of leads, is converted by LeadConversionJob in jobs of 50 that run right after the save.
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class LeadConversionService {
-    public static final Integer CONVERT_CHUNK = 100;
+    public static final Integer LEADS_PER_TRANSACTION = 50;
 
     public class ConversionException extends Exception {
     }
@@ -33,17 +37,41 @@ public without sharing class LeadConversionService {
         if (fromForms.isEmpty()) {
             return;
         }
+        if (fromForms.size() <= LEADS_PER_TRANSACTION) {
+            convertOrKeep(fromForms);
+            return;
+        }
+        List<Id> ids = new List<Id>(new Map<Id, Lead>(fromForms).keySet());
+        for (Integer start = 0; start < ids.size(); start += LEADS_PER_TRANSACTION) {
+            if (Limits.getQueueableJobs() == Limits.getLimitQueueableJobs()) {
+                System.debug(LoggingLevel.ERROR, 'A1 left ' + (ids.size() - start) + ' lead(s) unconverted: no job left');
+                return;
+            }
+            List<Id> batch = new List<Id>();
+            for (Integer i = start; i < Math.min(start + LEADS_PER_TRANSACTION, ids.size()); i++) {
+                batch.add(ids[i]);
+            }
+            System.enqueueJob(new LeadConversionJob(batch));
+        }
+    }
+
+    /** Converts the leads; if anything fails, the conversion is rolled back and the leads stay leads. */
+    public static void convertOrKeep(List<Lead> leads) {
         Savepoint savepoint = Database.setSavepoint();
         try {
-            convert(fromForms);
+            convert(leads);
         } catch (Exception error) {
             Database.rollback(savepoint);
-            System.debug(LoggingLevel.ERROR, 'A1 kept ' + fromForms.size() + ' lead(s) unconverted: ' + error.getMessage());
+            System.debug(LoggingLevel.ERROR, 'A1 kept ' + leads.size() + ' lead(s) unconverted: ' + error.getMessage());
         }
     }
 
     private static void convert(List<Lead> leads) {
-        String convertedStatus = [SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE ORDER BY SortOrder LIMIT 1].MasterLabel;
+        String convertedStatus = [
+            SELECT MasterLabel FROM LeadStatus WHERE IsConverted = TRUE
+            WITH SYSTEM_MODE
+            ORDER BY SortOrder LIMIT 1
+        ].MasterLabel;
         Map<String, Contact> contactsByEmail = existingContacts(leads);
         List<Database.LeadConvert> requests = new List<Database.LeadConvert>();
         for (Lead lead : leads) {
@@ -58,14 +86,7 @@ public without sharing class LeadConversionService {
             }
             requests.add(request);
         }
-        List<Database.LeadConvertResult> results = new List<Database.LeadConvertResult>();
-        for (Integer start = 0; start < requests.size(); start += CONVERT_CHUNK) {
-            List<Database.LeadConvert> chunk = new List<Database.LeadConvert>();
-            for (Integer i = start; i < Math.min(start + CONVERT_CHUNK, requests.size()); i++) {
-                chunk.add(requests[i]);
-            }
-            results.addAll(Database.convertLead(chunk, false));
-        }
+        List<Database.LeadConvertResult> results = Database.convertLead(requests, false, AccessLevel.SYSTEM_MODE);
         createDeals(new Map<Id, Lead>(leads), results);
     }
 
@@ -98,13 +119,13 @@ public without sharing class LeadConversionService {
         if (failForTest) {
             throw new ConversionException('Simulated failure after conversion');
         }
-        insert deals;
+        insert as system deals;
         List<OpportunityContactRole> roles = new List<OpportunityContactRole>();
         for (Integer i = 0; i < deals.size(); i++) {
             roles.add(new OpportunityContactRole(OpportunityId = deals[i].Id, ContactId = dealContacts[i], IsPrimary = true));
         }
-        insert roles;
-        insert repeatTasks;
+        insert as system roles;
+        insert as system repeatTasks;
     }
 
     private static Opportunity newDeal(Lead lead, Id accountId) {
@@ -130,7 +151,11 @@ public without sharing class LeadConversionService {
             }
         }
         Map<String, Contact> result = new Map<String, Contact>();
-        for (Contact known : [SELECT Id, AccountId, Email FROM Contact WHERE Email IN :emails AND AccountId != NULL ORDER BY CreatedDate]) {
+        for (Contact known : [
+            SELECT Id, AccountId, Email FROM Contact WHERE Email IN :emails AND AccountId != NULL
+            WITH SYSTEM_MODE
+            ORDER BY CreatedDate
+        ]) {
             result.put(known.Email.toLowerCase(), known);
         }
         return result;
@@ -144,6 +169,7 @@ public without sharing class LeadConversionService {
             FROM OpportunityContactRole
             WHERE ContactId IN :contactIds AND Opportunity.IsClosed = FALSE
                 AND Opportunity.RecordType.DeveloperName IN :pipelineNames
+            WITH SYSTEM_MODE
         ]) {
             if (!result.containsKey(role.ContactId)) {
                 result.put(role.ContactId, role.Opportunity);

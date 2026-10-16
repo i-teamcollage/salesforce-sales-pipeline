@@ -1,0 +1,476 @@
+{
+  "recorded_at": "2026-10-16",
+  "outcome": "Passed",
+  "tests_ran": 56,
+  "passing": 56,
+  "failing": 0,
+  "skipped": 0,
+  "test_run_coverage": "99%",
+  "org_wide_coverage": "99%",
+  "tests": [
+    {
+      "class": "AccessTest",
+      "method": "AC1_headOfSalesHasEverythingIncludingSettingsAndExport",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1765
+    },
+    {
+      "class": "AccessTest",
+      "method": "AC2_ownerReadsEverythingAndChangesNothing",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 381
+    },
+    {
+      "class": "AccessTest",
+      "method": "AC3_closerSeesOnlyOwnDealsFromKeyCallOnAndCannotDeleteOrExport",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 407
+    },
+    {
+      "class": "AccessTest",
+      "method": "AC4_chatManagerSeesPipelinesOneAndTwoAndCannotDeleteOrExport",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 319
+    },
+    {
+      "class": "AccessTest",
+      "method": "AC5_assistantSeesOnlyStagesNineAndTen",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 334
+    },
+    {
+      "class": "CallHeldTest",
+      "method": "A6_keyCallHeldNeedsTheRecording",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 654
+    },
+    {
+      "class": "CallHeldTest",
+      "method": "A6_recordingLetsTheDealMoveAndCreatesTheObjectionTask",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 771
+    },
+    {
+      "class": "ExportTest",
+      "method": "EX1_exportUserReadsEveryDealAndWritesNothing",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 157
+    },
+    {
+      "class": "ExportTest",
+      "method": "EX3_closingADealStampsItsCloseDate",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 436
+    },
+    {
+      "class": "ExportTest",
+      "method": "EX3_queryReturnsTheTwentyFiveColumnsOfEveryDeal",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 50
+    },
+    {
+      "class": "FieldsTest",
+      "method": "FL1_dealCarriesTheTwentyThreeBriefFields",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 70
+    },
+    {
+      "class": "FieldsTest",
+      "method": "FL2_listFieldsAreRestrictedPicklists",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 107
+    },
+    {
+      "class": "FieldsTest",
+      "method": "FL3_leadAuthorIsSetOnceAndNeverChanges",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 5010
+    },
+    {
+      "class": "FieldsTest",
+      "method": "FL5_warmUpTouchesCountCompletedTasksDuringWarmUp",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 522
+    },
+    {
+      "class": "FieldsTest",
+      "method": "FL6_startPeriodIsTheMonthAfterThePrepayment",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 519
+    },
+    {
+      "class": "GradeRoutingTest",
+      "method": "A3_gradeAGoesToKeyCallScheduled",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 640
+    },
+    {
+      "class": "GradeRoutingTest",
+      "method": "A3_gradesBAndCGoToWarmUp",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 205
+    },
+    {
+      "class": "GradeRoutingTest",
+      "method": "A3_laterStagesAndOtherPipelinesAreNotRouted",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 430
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A4_bookingHandsTheDealToTheCloserAndCreatesTheMeeting",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 793
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A4_rescheduleMovesTheMeetingInsteadOfAddingOne",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 669
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A4_slotLessThanThreeHoursAheadIsRejected",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 418
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A5_callLessThanADayAheadIsConfirmedAtOnce",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 392
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A5_rescheduleMovesBothConfirmations",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 602
+    },
+    {
+      "class": "KeyCallTest",
+      "method": "A5_twoConfirmationsDueTwentyFourHoursAndOneHourBefore",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 392
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_failedConversionKeepsTheLead",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1413
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_formLeadBecomesADealInNewLead",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 14264
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_leadWithoutRequestTypeIsLeftAlone",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 160
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_pastClientGetsANewDealOnTheSameAccount",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1371
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_secondFormFromAnOpenDealAddsATaskNotADeal",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1197
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "A1_sourceComesFromTheUtmTagAndNeverFails",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1756
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "NF1_aMonthOfLeadsArrivingAtOnceAllBecomeDeals",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 69975
+    },
+    {
+      "class": "LeadConversionTest",
+      "method": "RR1_onlyTheKeyCallChangesTheOwner",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 5696
+    },
+    {
+      "class": "PipelinesTest",
+      "method": "PL1_newClientsHasElevenStagesInOrder",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 800
+    },
+    {
+      "class": "PipelinesTest",
+      "method": "PL1_stageFromAnotherPipelineIsRejected",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 54
+    },
+    {
+      "class": "PipelinesTest",
+      "method": "PL2_reactivationHasFiveStagesInOrder",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 167
+    },
+    {
+      "class": "PipelinesTest",
+      "method": "PL3_repeatSalesHasFourStagesAndNoCopiesOfStagesFiveToTen",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 217
+    },
+    {
+      "class": "PrepaymentTest",
+      "method": "A8_changingTheMethodMovesTheTasks",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1003
+    },
+    {
+      "class": "PrepaymentTest",
+      "method": "A8_everyPaymentMethodHasItsOwnTerm",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 38
+    },
+    {
+      "class": "PrepaymentTest",
+      "method": "A8_prepaymentSetsTheTargetDateAndTwoControlTasks",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 704
+    },
+    {
+      "class": "ReactivationTest",
+      "method": "A7_jobRunsEveryDay",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 327
+    },
+    {
+      "class": "ReactivationTest",
+      "method": "A7_refusalReasonMovesTheSameDealToReactivation",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 639
+    },
+    {
+      "class": "ReactivationTest",
+      "method": "A7_refusalTypePicksTheStage",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 437
+    },
+    {
+      "class": "ReactivationTest",
+      "method": "A7_silenceDaysStayBetweenFiveAndSeven",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 9
+    },
+    {
+      "class": "ReactivationTest",
+      "method": "A7_silentDealsMoveAfterTheSetNumberOfDays",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 654
+    },
+    {
+      "class": "ReplyTaskTest",
+      "method": "A2_completingTheReplyStampsTheFirstResponseOnce",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 685
+    },
+    {
+      "class": "ReplyTaskTest",
+      "method": "A2_everyPipelineGetsTheReplyTask",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 168
+    },
+    {
+      "class": "ReplyTaskTest",
+      "method": "A2_newDealGetsAReplyTaskDueInThirtyMinutes",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 99
+    },
+    {
+      "class": "StageGatingTest",
+      "method": "FL4_completeDealMovesThroughEveryStage",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 2753
+    },
+    {
+      "class": "StageGatingTest",
+      "method": "FL4_eachRequiredFieldBlocksItsStage",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 774
+    },
+    {
+      "class": "StageGatingTest",
+      "method": "FL4_refusalNeedsAReasonAndAType",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 26
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR1_returnFromReactivationKeepsTheSameRecord",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 440
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR1_returnMustLandAtKeyCallScheduled",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 110
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR1_returnRequiresRequalification",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 85
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR2_wonDealInRepeatSegmentIsNotMovedOrCopied",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 1376
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR3_falseObjectionGoesBackToPrepaymentInsideNewClients",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 259
+    },
+    {
+      "class": "TransitionsTest",
+      "method": "TR4_repeatDealContinuesInNewClientsWhenItsCallIsBooked",
+      "outcome": "Pass",
+      "message": null,
+      "run_time_ms": 218
+    }
+  ],
+  "coverage": [
+    {
+      "name": "Activities",
+      "lines": 42,
+      "covered": 42
+    },
+    {
+      "name": "KeyCallService",
+      "lines": 78,
+      "covered": 78
+    },
+    {
+      "name": "LeadConversionJob",
+      "lines": 7,
+      "covered": 7
+    },
+    {
+      "name": "LeadConversionService",
+      "lines": 111,
+      "covered": 109
+    },
+    {
+      "name": "LeadTrigger",
+      "lines": 3,
+      "covered": 3
+    },
+    {
+      "name": "OpportunityTrigger",
+      "lines": 1,
+      "covered": 1
+    },
+    {
+      "name": "OpportunityTriggerHandler",
+      "lines": 21,
+      "covered": 21
+    },
+    {
+      "name": "PaymentControl",
+      "lines": 31,
+      "covered": 31
+    },
+    {
+      "name": "PipelineTransitions",
+      "lines": 13,
+      "covered": 13
+    },
+    {
+      "name": "Pipelines",
+      "lines": 22,
+      "covered": 22
+    },
+    {
+      "name": "SalesSettings",
+      "lines": 44,
+      "covered": 44
+    },
+    {
+      "name": "SilentDealsJob",
+      "lines": 22,
+      "covered": 22
+    },
+    {
+      "name": "TaskCompletion",
+      "lines": 33,
+      "covered": 32
+    },
+    {
+      "name": "TaskTrigger",
+      "lines": 1,
+      "covered": 1
+    }
+  ]
+}

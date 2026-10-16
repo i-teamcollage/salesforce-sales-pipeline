@@ -49,6 +49,46 @@ def test_every_class_and_trigger_uses_the_project_api_version():
         assert text(read(meta), "apiVersion") == "67.0", meta.name
 
 
+DML = re.compile(r"(?:^|[;{})]|\belse\b)\s*(insert|update|delete|upsert|undelete|merge)\s+(?!as\s+(?:user|system)\b)",
+                 re.MULTILINE)
+DATABASE_CALL = re.compile(r"\bDatabase\.(insert|update|delete|upsert|undelete|merge|convertLead|query|getQueryLocator"
+                           r"|countQuery)\(")
+INLINE_QUERY = re.compile(r"\[\s*(SELECT|FIND)\b", re.IGNORECASE)
+ACCESS_MODE = re.compile(r"\bWITH\s+(USER|SYSTEM)_MODE\b|\bAccessLevel\.(USER|SYSTEM)_MODE\b", re.IGNORECASE)
+
+
+def _code_only(source):
+    """The Apex source with comments and string literals blanked out, so keywords inside them don't count."""
+    return re.sub(r"/\*.*?\*/|//[^\n]*|'(?:\\.|[^'\\])*'", lambda m: re.sub(r"[^\n]", " ", m.group()), source,
+                  flags=re.DOTALL)
+
+
+def _enclosed(code, start, opening, closing):
+    """The text from `start` (an opening bracket) to its matching closing bracket."""
+    depth = 0
+    for index in range(start, len(code)):
+        depth += {opening: 1, closing: -1}.get(code[index], 0)
+        if depth == 0:
+            return code[start:index + 1]
+    raise AssertionError(f"unbalanced {opening} at {start}")
+
+
+@pytest.mark.parametrize("path", sorted([*CLASSES.glob("*.cls"), *FORCE_APP.joinpath("triggers").glob("*.trigger")]),
+                         ids=lambda path: path.name)
+def test_every_database_operation_states_its_access_mode(path):
+    # From API 67.0 a statement without one runs with the running user's permissions, so each one says.
+    code = _code_only(path.read_text(encoding="utf-8"))
+    line = lambda index: code.count("\n", 0, index) + 1  # noqa: E731
+    missing = [f"line {line(m.start(1))}: {m.group(1)}" for m in DML.finditer(code)]
+    for match in DATABASE_CALL.finditer(code):
+        if not ACCESS_MODE.search(_enclosed(code, match.end() - 1, "(", ")")):
+            missing.append(f"line {line(match.start())}: Database.{match.group(1)}")
+    for match in INLINE_QUERY.finditer(code):
+        if not ACCESS_MODE.search(_enclosed(code, match.start(), "[", "]")):
+            missing.append(f"line {line(match.start())}: inline {match.group(1).upper()}")
+    assert not missing, missing
+
+
 def test_the_test_suite_runs_every_test_class():
     suite = read(FORCE_APP / "testSuites" / "Sales_Pipeline.testSuite-meta.xml")
     classes = sorted(path.stem for path in CLASSES.glob("*Test.cls"))

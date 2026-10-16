@@ -6,6 +6,8 @@ from sfmeta import FORCE_APP, OPPORTUNITY, ROOT, permission_set, read, text, tex
 ROLES = ["Head_of_Sales", "Business_Owner", "Closer", "Chat_Manager", "Assistant"]
 SYSTEM_FILLED = ["First_Response_At__c", "Lead_Author__c", "Warm_Up_Touches__c", "Key_Call_Booked_On__c",
                  "Stage_Order__c", "Start_Period__c"]
+# A real org refuses a permission set that grants the key without the permissions listed with it.
+REQUIRED_ALONGSIDE = {"CustomizeApplication": {"ManageCustomPermissions", "ManageTranslation"}}
 
 
 def objects(name):
@@ -40,6 +42,14 @@ def test_head_of_sales_has_everything():
     opportunity = objects("Head_of_Sales")["Opportunity"]
     assert text(opportunity, "modifyAllRecords") == "true"
     assert {"ExportReport", "RunReports", "CustomizeApplication"} <= user_permissions("Head_of_Sales")
+
+
+@pytest.mark.parametrize("name", ROLES + ["Sheets_Export"])
+def test_permissions_come_with_what_salesforce_requires_alongside(name):
+    granted = user_permissions(name)
+    for permission, required in REQUIRED_ALONGSIDE.items():
+        if permission in granted:
+            assert required <= granted, (name, permission, required - granted)
 
 
 @pytest.mark.parametrize("name", ["Business_Owner", "Sheets_Export"])

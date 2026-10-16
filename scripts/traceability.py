@@ -23,7 +23,8 @@ ID = r"(?:PL|TR|FL|A|RR|AC|EX|NF)\d+"
 
 # Where each requirement is implemented. Paths are relative to the repository; globs are allowed.
 METADATA = {
-    "NF1": [APP + "classes/LeadConversionService.cls", APP + "classes/OpportunityTriggerHandler.cls"],
+    "NF1": [APP + "classes/LeadConversionService.cls", APP + "classes/LeadConversionJob.cls",
+            APP + "classes/OpportunityTriggerHandler.cls"],
     "PL1": [APP + "objects/Opportunity/recordTypes/New_Clients.recordType-meta.xml",
             APP + "objects/Opportunity/businessProcesses/New_Clients_Process.businessProcess-meta.xml",
             APP + "standardValueSets/OpportunityStage.standardValueSet-meta.xml",

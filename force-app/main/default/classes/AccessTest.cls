@@ -1,6 +1,7 @@
 /**
  * AC1 to AC5: what each role sees and may do. Sharing is Private; rights come from the role's
- * permission set, and visibility from ownership plus the two criteria-based sharing rules.
+ * permission set, and visibility from ownership plus the two criteria-based sharing rules, whose shares
+ * the setup adds (TestData.shareAsTheRulesDo says why).
  * Every check runs as the user, with user-mode queries and DML.
  */
 @isTest
@@ -24,7 +25,8 @@ private class AccessTest {
             named(TestData.deal(Pipelines.REACTIVATION, Pipelines.DEFERRED_DEMAND, null), 'Refused', chatManager),
             named(TestData.deal(Pipelines.REPEAT_SALES, Pipelines.BUILDING_BASE, null), 'Repeat of head', head)
         };
-        insert deals;
+        insert as system deals;
+        TestData.shareAsTheRulesDo(deals);
     }
 
     private static Opportunity named(Opportunity deal, String name, Id ownerId) {
@@ -34,7 +36,7 @@ private class AccessTest {
     }
 
     private static Id dealId(String name) {
-        return [SELECT Id FROM Opportunity WHERE Name = :name].Id;
+        return [SELECT Id FROM Opportunity WHERE Name = :name WITH SYSTEM_MODE].Id;
     }
 
     private static Set<String> visible() {
@@ -58,13 +60,13 @@ private class AccessTest {
     private static Boolean has(String alias, String permission) {
         User person = TestData.user(alias);
         Set<Id> setIds = new Set<Id>();
-        for (PermissionSetAssignment assignment : [SELECT PermissionSetId FROM PermissionSetAssignment WHERE AssigneeId = :person.Id]) {
+        for (PermissionSetAssignment assignment : [SELECT PermissionSetId FROM PermissionSetAssignment WHERE AssigneeId = :person.Id WITH SYSTEM_MODE]) {
             setIds.add(assignment.PermissionSetId);
         }
-        for (PermissionSet profileSet : [SELECT Id FROM PermissionSet WHERE ProfileId = :person.ProfileId]) {
+        for (PermissionSet profileSet : [SELECT Id FROM PermissionSet WHERE ProfileId = :person.ProfileId WITH SYSTEM_MODE]) {
             setIds.add(profileSet.Id);
         }
-        for (PermissionSet permissionSet : Database.query('SELECT ' + permission + ' FROM PermissionSet WHERE Id IN :setIds')) {
+        for (PermissionSet permissionSet : Database.query('SELECT ' + permission + ' FROM PermissionSet WHERE Id IN :setIds', AccessLevel.SYSTEM_MODE)) {
             if ((Boolean) permissionSet.get(permission)) {
                 return true;
             }
@@ -107,7 +109,7 @@ private class AccessTest {
             Assert.isTrue(canEdit(own), 'works on own deals');
             Assert.isFalse(canDelete(own), 'cannot delete');
         }
-        for (Opportunity deal : [SELECT RecordType.DeveloperName, Stage_Order__c FROM Opportunity WHERE OwnerId = :closerId]) {
+        for (Opportunity deal : [SELECT RecordType.DeveloperName, Stage_Order__c FROM Opportunity WHERE OwnerId = :closerId WITH SYSTEM_MODE]) {
             Assert.areEqual(Pipelines.NEW_CLIENTS, deal.RecordType.DeveloperName, 'in pipeline 1');
             Assert.isTrue(deal.Stage_Order__c >= 4, 'from stage 4 on');
         }

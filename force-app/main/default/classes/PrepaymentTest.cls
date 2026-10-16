@@ -12,7 +12,7 @@ private class PrepaymentTest {
     private static Opportunity atPrepayment() {
         Opportunity deal = TestData.deal(Pipelines.NEW_CLIENTS, Pipelines.PREPAYMENT_RECEIVED, TestData.user('closer1').Id);
         deal.OwnerId = TestData.user('chatmgr').Id;
-        insert deal;
+        insert as system deal;
         return deal;
     }
 
@@ -22,6 +22,7 @@ private class PrepaymentTest {
         for (Task task : [
             SELECT Automation__c, ActivityDate, OwnerId FROM Task
             WHERE WhatId = :dealId AND Automation__c IN :automations AND IsClosed = FALSE
+            WITH SYSTEM_MODE
         ]) {
             tasks.put(task.Automation__c, task);
         }
@@ -32,7 +33,7 @@ private class PrepaymentTest {
     static void A8_prepaymentSetsTheTargetDateAndTwoControlTasks() {
         Opportunity deal = atPrepayment();
         Date paidOn = Date.today();
-        update new Opportunity(Id = deal.Id, Prepayment_Date__c = paidOn, Payment_Method__c = 'Bank instalments');
+        update as system new Opportunity(Id = deal.Id, Prepayment_Date__c = paidOn, Payment_Method__c = 'Bank instalments');
 
         Date target = paidOn.addDays(SalesSettings.daysToFullPayment('Bank instalments'));
         Assert.areEqual(target, PaymentControl.targetDate(TestData.reload(deal.Id)), 'target date from the setting');
@@ -62,8 +63,8 @@ private class PrepaymentTest {
     @isTest
     static void A8_changingTheMethodMovesTheTasks() {
         Opportunity deal = atPrepayment();
-        update new Opportunity(Id = deal.Id, Prepayment_Date__c = Date.today(), Payment_Method__c = 'Single payment');
-        update new Opportunity(Id = deal.Id, Payment_Method__c = 'In-house instalments');
+        update as system new Opportunity(Id = deal.Id, Prepayment_Date__c = Date.today(), Payment_Method__c = 'Single payment');
+        update as system new Opportunity(Id = deal.Id, Payment_Method__c = 'In-house instalments');
         Map<String, Task> tasks = controlTasks(deal.Id);
         Assert.areEqual(2, tasks.size(), 'still two tasks, not four');
         Assert.areEqual(Date.today().addDays(SalesSettings.daysToFullPayment('In-house instalments')),

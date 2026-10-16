@@ -2,6 +2,7 @@
  * What happens when a task on a deal is completed.
  * A2: completing the "Reply" task stamps the deal's first response time, once.
  * FL5: every task completed while the deal is in Warm-up adds one to its warm-up touches.
+ * Its database work runs in system mode on purpose: it acts for the business, whoever saved the record.
  */
 public without sharing class TaskCompletion {
     public static void afterSave(List<Task> tasks, Map<Id, Task> oldMap) {
@@ -23,6 +24,7 @@ public without sharing class TaskCompletion {
         Map<Id, Opportunity> deals = new Map<Id, Opportunity>([
             SELECT Id, RecordTypeId, StageName, First_Response_At__c, Warm_Up_Touches__c
             FROM Opportunity WHERE Id IN :dealIds
+            WITH SYSTEM_MODE
         ]);
         Map<Id, Opportunity> changed = new Map<Id, Opportunity>();
         for (Task task : completed) {
@@ -39,12 +41,12 @@ public without sharing class TaskCompletion {
                 changed.put(deal.Id, deal);
             }
         }
-        update changed.values();
+        update as system changed.values();
     }
 
     private static Set<String> closedStatuses() {
         Set<String> result = new Set<String>();
-        for (TaskStatus status : [SELECT ApiName, MasterLabel FROM TaskStatus WHERE IsClosed = TRUE]) {
+        for (TaskStatus status : [SELECT ApiName, MasterLabel FROM TaskStatus WHERE IsClosed = TRUE WITH SYSTEM_MODE]) {
             result.add(status.ApiName);
             result.add(status.MasterLabel);
         }
